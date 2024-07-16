@@ -9,6 +9,7 @@ import com.epam.egorbaranov.coffeeshop.receipt.SimpleReceiptFormatter;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,7 +22,8 @@ public class ReceiptFormatterTest {
                 List.of(Beverage.LARGE_COFFEE),
                 List.of(Snack.BACON_ROLL),
                 List.of(Extra.EXTRA_MILK),
-                new BigDecimal("8.40")
+                new BigDecimal("8.40"),
+                Arrays.asList("Free beverage discount: -3.55 CHF", "Free extra discount: -0.32 CHF")
         );
 
         FormatReceipt formatter = new SimpleReceiptFormatter();
@@ -32,6 +34,9 @@ public class ReceiptFormatterTest {
                 "Large Coffee - 3.55 CHF\n" +
                 "Bacon Roll - 4.53 CHF\n" +
                 "Extra Milk - 0.32 CHF\n" +
+                "--------------------\n" +
+                "Free beverage discount: -3.55 CHF\n" +
+                "Free extra discount: -0.32 CHF\n" +
                 "--------------------\n" +
                 "Total: 8.40 CHF\n";
 
