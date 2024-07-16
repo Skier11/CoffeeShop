@@ -13,12 +13,14 @@ public class Receipt {
     private final List<Snack> snacks;
     private final List<Extra> extras;
     private final BigDecimal total;
+    private final List<String> discounts;
 
-    public Receipt(List<Beverage> beverages, List<Snack> snacks, List<Extra> extras, BigDecimal total) {
+    public Receipt(List<Beverage> beverages, List<Snack> snacks, List<Extra> extras, BigDecimal total, List<String> discounts) {
         this.beverages = Objects.requireNonNull(beverages, "Beverages cannot be null");
         this.snacks = Objects.requireNonNull(snacks, "Snacks cannot be null");
         this.extras = Objects.requireNonNull(extras, "Extras cannot be null");
         this.total = Objects.requireNonNull(total, "Total cannot be null");
+        this.discounts = Objects.requireNonNull(discounts, "Discounts cannot be null");
     }
 
     public List<Beverage> getBeverages() {
@@ -35,5 +37,9 @@ public class Receipt {
 
     public BigDecimal getTotal() {
         return total;
+    }
+
+    public List<String> getDiscounts() {
+        return discounts;
     }
 }
