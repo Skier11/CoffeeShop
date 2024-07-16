@@ -19,6 +19,13 @@ public class SimpleReceiptFormatter implements FormatReceipt {
         appendItems(receipt.getExtras(), receiptBuilder);
 
         receiptBuilder.append("--------------------\n");
+
+        // Append discounts
+        for (String discount : receipt.getDiscounts()) {
+            receiptBuilder.append(discount).append("\n");
+        }
+
+        receiptBuilder.append("--------------------\n");
         receiptBuilder.append(String.format("Total: %.2f CHF\n", receipt.getTotal()));
 
         return receiptBuilder.toString();

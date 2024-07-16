@@ -8,6 +8,7 @@ import com.epam.egorbaranov.coffeeshop.receipt.FormatReceipt;
 import com.epam.egorbaranov.coffeeshop.receipt.Receipt;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,12 +29,13 @@ public class CoffeeShopService {
         List<Beverage> beverages = coffeeShop.getBeverages();
         List<Snack> snacks = coffeeShop.getSnacks();
         List<Extra> extras = coffeeShop.getExtras();
+        List<String> discounts = new ArrayList<>();
 
         BigDecimal total = calculateTotal(beverages, snacks, extras);
-        total = applyBeverageDiscount(beverages, total, previousBeverages);
-        total = applyExtraDiscount(snacks, extras, total);
+        total = applyBeverageDiscount(beverages, total, previousBeverages, discounts);
+        total = applyExtraDiscount(snacks, extras, total, discounts);
 
-        return new Receipt(beverages, snacks, extras, total);
+        return new Receipt(beverages, snacks, extras, total, discounts);
     }
 
     private BigDecimal calculateTotal(List<Beverage> beverages, List<Snack> snacks, List<Extra> extras) {
@@ -54,29 +56,32 @@ public class CoffeeShopService {
         return total;
     }
 
-    private BigDecimal applyBeverageDiscount(List<Beverage> beverages, BigDecimal total, int previousBeverages) {
+    private BigDecimal applyBeverageDiscount(List<Beverage> beverages, BigDecimal total, int previousBeverages, List<String> discounts) {
         int totalBeverages = previousBeverages + beverages.size();
         if (totalBeverages >= BEVERAGE_DISCOUNT_THRESHOLD) {
             int discountBeverages = totalBeverages / BEVERAGE_DISCOUNT_THRESHOLD;
             for (int i = 0; i < discountBeverages && i < beverages.size(); i++) {
-                total = total.subtract(beverages.get(i).getPrice());
+                BigDecimal discount = beverages.get(i).getPrice();
+                total = total.subtract(discount);
+                discounts.add("Free beverage discount: -" + discount + " CHF");
             }
         }
         return total;
     }
 
-    private BigDecimal applyExtraDiscount(List<Snack> snacks, List<Extra> extras, BigDecimal total) {
+    private BigDecimal applyExtraDiscount(List<Snack> snacks, List<Extra> extras, BigDecimal total, List<String> discounts) {
         if (!snacks.isEmpty() && !extras.isEmpty()) {
             Extra highestPricedExtra = extras.stream().max((e1, e2) -> e1.getPrice().compareTo(e2.getPrice())).orElse(null);
             if (highestPricedExtra != null) {
-                total = total.subtract(highestPricedExtra.getPrice());
+                BigDecimal discount = highestPricedExtra.getPrice();
+                total = total.subtract(discount);
+                discounts.add("Free extra discount: -" + discount + " CHF");
             }
         }
         return total;
     }
 
     public String formatReceipt(Receipt receipt) {
-        Objects.requireNonNull(receipt, "Receipt cannot be null");
         return formatter.format(receipt);
     }
 }
