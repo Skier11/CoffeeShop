@@ -17,3 +17,20 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.jar {
+    manifest {
+        attributes(
+                "Main-Class" to "com.coffeeshop.Main"
+        )
+    }
+}
+
+// To ensure the main class is included in the jar manifest
+tasks.withType<Jar> {
+    manifest {
+        attributes(
+                "Main-Class" to "com.coffeeshop.Main"
+        )
+    }
+}
