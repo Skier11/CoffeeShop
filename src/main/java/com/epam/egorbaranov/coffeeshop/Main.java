@@ -37,16 +37,28 @@ public class Main {
     }
 
     private static void inputPreviousBeverages() {
-        System.out.print("Enter the number of previously purchased beverages: ");
-        previousBeverages = scanner.nextInt();
-        scanner.nextLine();  // Consume newline
+        while (true) {
+            System.out.print("Enter the number of previously purchased beverages (0-4): ");
+            if (scanner.hasNextInt()) {
+                previousBeverages = scanner.nextInt();
+                scanner.nextLine();
+                if (previousBeverages >= 0 && previousBeverages <= 4) {
+                    break;
+                } else {
+                    System.out.println("Please enter a number between 0 and 4.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a number between 0 and 4.");
+                scanner.nextLine();
+            }
+        }
     }
 
     private static void handleUserInput() {
         while (true) {
             printMenu();
             int choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
+            scanner.nextLine();
 
             if (choice == 9) {
                 break;
